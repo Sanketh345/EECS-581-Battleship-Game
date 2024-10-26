@@ -1,0 +1,82 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Constants
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+GRID_SIZE = 10
+CELL_SIZE = 40
+MARGIN = 5
+BOARD_OFFSET_X = 100
+BOARD_OFFSET_Y = 100
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+GRAY = (200, 200, 200)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
+# Create screen
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Battleship Game")
+
+# Game Board
+player_board = [["_" for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
+opponent_board = [["_" for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
+
+# Draw grid on screen
+def draw_board(board, offset_x, offset_y):
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
+            x = offset_x + col * (CELL_SIZE + MARGIN)
+            y = offset_y + row * (CELL_SIZE + MARGIN)
+            color = GRAY if board[row][col] == "_" else BLUE
+            pygame.draw.rect(screen, color, (x, y, CELL_SIZE, CELL_SIZE))
+            pygame.draw.rect(screen, WHITE, (x, y, CELL_SIZE, CELL_SIZE), 2)
+
+# Handle ship placement (to be implemented by group members)
+def place_ships(board):
+    # TODO: Implement ship placement logic
+    pass
+
+# Handle player attack (to be implemented by group members)
+def player_attack(board, x, y):
+    # TODO: Implement attack logic
+    pass
+
+# Main game loop
+def main():
+    running = True
+    game_phase = "setup"  # Possible phases: setup, player_turn, opponent_turn, game_over
+
+    while running:
+        screen.fill(WHITE)
+
+        # Draw player and opponent boards
+        draw_board(player_board, BOARD_OFFSET_X, BOARD_OFFSET_Y)
+        draw_board(opponent_board, BOARD_OFFSET_X + 500, BOARD_OFFSET_Y)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+                if game_phase == "setup":
+                    # TODO: Implement ship placement interaction
+                    pass
+                elif game_phase == "player_turn":
+                    # Example of how to handle clicks within the board
+                    if BOARD_OFFSET_X <= mouse_x < BOARD_OFFSET_X + GRID_SIZE * (CELL_SIZE + MARGIN):
+                        if BOARD_OFFSET_Y <= mouse_y < BOARD_OFFSET_Y + GRID_SIZE * (CELL_SIZE + MARGIN):
+                            col = (mouse_x - BOARD_OFFSET_X) // (CELL_SIZE + MARGIN)
+                            row = (mouse_y - BOARD_OFFSET_Y) // (CELL_SIZE + MARGIN)
+                            # TODO: Implement player attack logic
+                            player_attack(opponent_board, col, row)
+
+        # Refresh the screen
+        pygame.display.flip()
+
+if __name__ == "__main__":
+    main()
